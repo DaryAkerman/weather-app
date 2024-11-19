@@ -23,9 +23,9 @@ pipeline {
 
         stage("Prepare environment") {
             steps {
-                // Fetch the full Git history to ensure origin/main is available
                 script {
                     sh """
+                        git config --global --add safe.directory ${WORKSPACE}
                         git fetch --no-tags --prune --progress origin +refs/heads/*:refs/remotes/origin/*
                         git checkout ${env.BRANCH_NAME}
                     """
