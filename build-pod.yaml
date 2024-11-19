@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jenkins-agent-pod
+spec:
+  containers:
+    - name: ez-docker-helm-build
+      image: ezezeasy/ez-docker-helm-build:1.41
+      imagePullPolicy: Always
+      securityContext:
+        privileged: true
+
+    - name: python-test
+      image: python:3.9-slim
+      command: ["sleep"]
+      args: ["infinity"]
+      imagePullPolicy: Always
+      securityContext:
+        privileged: false
+
+    - name: docker-compose
+      image: docker/compose:latest
+      command: ["sleep"]
+      args: ["infinity"]
+      imagePullPolicy: Always
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+
+  volumes:
+    - name: docker-socket
+      hostPath:
+        path: /var/run/docker.sock
+        type: FileOrCreate
