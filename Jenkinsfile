@@ -91,7 +91,13 @@ pipeline {
                             git config user.email "jenkins@example.com"
                             git add ${valuesFilePath}
                             git commit -m "Update Helm chart image tag to 1.0.${env.BUILD_NUMBER}"
-                            git push https://$GITHUB_TOKEN@github.com/${GITHUB_REPO}.git HEAD:${env.BRANCH_NAME}
+                            
+                            # Pull the latest changes and rebase
+                            git fetch origin
+                            git rebase origin/main
+                            
+                            # Push the changes
+                            git push https://$GITHUB_TOKEN@github.com/${GITHUB_REPO}.git HEAD:main
                         """
                     }
                 }
