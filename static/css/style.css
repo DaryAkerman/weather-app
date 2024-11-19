@@ -9,14 +9,14 @@
 /* Body Styling */
 body {
     background-color: #e0f7fa; /* Light icy blue */
-    color: #03396c; /* Deep blue text */
+    color: red; /* Deep blue text */
     line-height: 1.6;
     padding: 20px;
 }
 
 /* Header Styling */
 .header {
-    background-color: #0277bd; /* Medium blue */
+    background-color: red; /* Medium blue */
     color: white;
     text-align: center;
     padding: 20px 10px;
@@ -40,7 +40,7 @@ body {
 }
 
 .section {
-    background-color: white;
+    background-color: red;
     padding: 20px;
     margin: 10px 0;
     border-radius: 8px;
@@ -48,13 +48,13 @@ body {
 }
 
 .section h2 {
-    color: #01579b; /* Darker blue */
+    color: red; /* Darker blue */
     margin-bottom: 10px;
     font-size: 1.8rem;
 }
 
 .section p {
-    color: #03396c;
+    color: red;
     font-size: 1.1rem;
 }
 
@@ -63,6 +63,6 @@ body {
     text-align: center;
     margin-top: 20px;
     font-size: 0.9rem;
-    color: #01579b;
+    color: red;
     padding: 10px 0;
 }
