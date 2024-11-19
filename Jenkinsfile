@@ -33,34 +33,34 @@ pipeline {
             }
         }
 
-        stage("Check for meaningful changes") {
+        stage("Check for Meaningful Changes") {
             steps {
                 script {
+                    // Fetch the latest remote branch
                     sh "git fetch origin main"
-                    
+
+                    // Check the author of the latest commit
                     def author = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
                     if (author == "Jenkins CI") {
                         echo "Latest commit made by Jenkins. Skipping build."
-                        currentBuild.result = 'SUCCESS'
-                        return
+                        error("Build skipped because it was triggered by Jenkins.")
                     }
 
                     // Check for meaningful changes
                     def changes = sh(script: "git diff --name-only origin/main HEAD", returnStdout: true).trim()
                     if (changes == 'applic/values.yaml') {
                         echo "Only values.yaml was modified, skipping build."
-                        currentBuild.result = 'SUCCESS'
-                        return
+                        error("Build skipped because only values.yaml was modified.")
                     } else if (changes.isEmpty()) {
                         echo "No meaningful changes detected. Skipping build."
-                        currentBuild.result = 'SUCCESS'
-                        return
+                        error("Build skipped because there are no changes.")
                     } else {
                         echo "Detected meaningful changes: ${changes}"
                     }
                 }
             }
         }
+
 
         stage("Build docker image") {
             steps {
