@@ -17,50 +17,26 @@ pipeline {
     stages {
         stage("Checkout code") {
             steps {
-                checkout scm
-            }
-        }
-
-        stage("Prepare environment") {
-            steps {
                 script {
-                    sh """
-                        git config --global --add safe.directory ${WORKSPACE}
-                        git fetch --no-tags --prune --progress origin +refs/heads/*:refs/remotes/origin/*
-                        git checkout ${env.BRANCH_NAME}
-                    """
+                    checkout scm
+                    
+                    // Fetch the latest commit message
+                    def commitMessage = sh(
+                        script: "git log -1 --pretty=%B",
+                        returnStdout: true
+                    ).trim()
+
+                    // Check if the commit message contains [skip-ci]
+                    if (commitMessage.contains("[skip-ci]")) {
+                        echo "Skipping build due to commit message: ${commitMessage}"
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    }
+
+                    echo "Proceeding with build. Commit message: ${commitMessage}"
                 }
             }
         }
-
-        stage("Check for Meaningful Changes") {
-            steps {
-                script {
-                    // Fetch the latest remote branch
-                    sh "git fetch origin main"
-
-                    // Check the author of the latest commit
-                    def author = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
-                    if (author == "Jenkins CI") {
-                        echo "Latest commit made by Jenkins user bot in GitHub. Skipping build."
-                        error("Build skipped because it was triggered by Jenkins.")
-                    }
-
-                    // Check for meaningful changes
-                    def changes = sh(script: "git diff --name-only origin/main HEAD", returnStdout: true).trim()
-                    if (changes == 'applic/values.yaml') {
-                        echo "Only values.yaml was modified, skipping build."
-                        error("Build skipped because only values.yaml was modified.")
-                    } else if (changes.isEmpty()) {
-                        echo "No meaningful changes detected. Skipping build."
-                        error("Build skipped because there are no changes.")
-                    } else {
-                        echo "Detected meaningful changes: ${changes}"
-                    }
-                }
-            }
-        }
-
 
         stage("Build docker image") {
             steps {
@@ -99,18 +75,12 @@ pipeline {
                         def updatedYaml = valuesYaml.replaceAll(/(?<=tag: ).*/, "\"1.0.${env.BUILD_NUMBER}\"")
                         writeFile(file: valuesFilePath, text: updatedYaml)
 
-                        // Commit and push changes to GitHub
+                        // Commit and push changes to GitHub with [skip-ci] in the message
                         sh """
                             git config user.name "Jenkins CI"
                             git config user.email "jenkins@example.com"
                             git add ${valuesFilePath}
-                            git commit -m "Update Helm chart image tag to 1.0.${env.BUILD_NUMBER}"
-                            
-                            # Pull the latest changes and rebase
-                            git fetch origin
-                            git rebase origin/main
-                            
-                            # Push the changes
+                            git commit -m "[skip-ci] Update Helm chart image tag to 1.0.${env.BUILD_NUMBER}"
                             git push https://$GITHUB_TOKEN@github.com/${GITHUB_REPO}.git HEAD:main
                         """
                     }
