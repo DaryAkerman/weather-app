@@ -18,24 +18,18 @@ pipeline {
         stage("Checkout code") {
             steps {
                 script {
-                    // Add the workspace to Git's safe directory list
                     sh "git config --global --add safe.directory ${env.WORKSPACE}"
-                    
-                    // Checkout the code
                     checkout scm
-                    
-                    // Fetch the latest commit message
                     def commitMessage = sh(
                         script: "git log -1 --pretty=%B",
                         returnStdout: true
                     ).trim()
 
-                    // Check if the commit message contains [skip-ci]
                     if (commitMessage.contains("[skip-ci]")) {
                         echo "Skipping build due to commit message: ${commitMessage}"
                         error("Build aborted due to [skip-ci] in commit message.")
                     }
-
+                    
                     echo "Proceeding with build. Commit message: ${commitMessage}"
                 }
             }
@@ -72,13 +66,9 @@ pipeline {
                 withCredentials([string(credentialsId: 'github-secret', variable: 'GITHUB_TOKEN')]) {
                     script {
                         def valuesFilePath = "applic/values.yaml"
-                        
-                        // Read and modify values.yaml
                         def valuesYaml = readFile(valuesFilePath)
                         def updatedYaml = valuesYaml.replaceAll(/(?<=tag: ).*/, "\"1.0.${env.BUILD_NUMBER}\"")
                         writeFile(file: valuesFilePath, text: updatedYaml)
-
-                        // Commit and push changes to GitHub with [skip-ci] in the message
                         sh """
                             git config user.name "Jenkins CI"
                             git config user.email "jenkins@example.com"
