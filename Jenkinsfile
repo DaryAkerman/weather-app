@@ -18,6 +18,10 @@ pipeline {
         stage("Checkout code") {
             steps {
                 script {
+                    // Add the workspace to Git's safe directory list
+                    sh "git config --global --add safe.directory ${env.WORKSPACE}"
+                    
+                    // Checkout the code
                     checkout scm
                     
                     // Fetch the latest commit message
