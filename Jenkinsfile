@@ -27,11 +27,9 @@ pipeline {
 
                     if (commitMessage.contains("[skip-ci]")) {
                         echo "Skipping build due to commit message: ${commitMessage}"
-                        catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
-                            error("Build aborted due to [skip-ci] in commit message.")
-                        }
+                        error("Build aborted due to [skip-ci] in commit message.")
                     }
-
+                    
                     echo "Proceeding with build. Commit message: ${commitMessage}"
                 }
             }
