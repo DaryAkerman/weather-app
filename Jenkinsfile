@@ -36,9 +36,18 @@ pipeline {
         stage("Check for meaningful changes") {
             steps {
                 script {
-                    def changes = sh(script: "git diff --name-only origin/${env.BRANCH_NAME} HEAD", returnStdout: true).trim()
+                    // Fetch the latest remote branch to ensure we're comparing against it
+                    sh "git fetch origin ${env.BRANCH_NAME}:${env.BRANCH_NAME}"
+                    
+                    // Compare changes between the remote branch and the local branch
+                    def changes = sh(script: "git diff --name-only ${env.BRANCH_NAME} HEAD", returnStdout: true).trim()
+                    
                     if (changes == 'applic/values.yaml') {
                         echo "Only values.yaml was modified, skipping build."
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    } else if (changes.isEmpty()) {
+                        echo "No meaningful changes detected. Skipping build."
                         currentBuild.result = 'SUCCESS'
                         return
                     } else {
@@ -47,6 +56,7 @@ pipeline {
                 }
             }
         }
+
 
         stage("Build docker image") {
             steps {
