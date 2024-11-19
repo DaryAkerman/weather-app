@@ -1,27 +1,42 @@
-pipeline{
-    agent{
-        kubernetes{
+pipeline {
+    agent {
+        kubernetes {
             label "weather-app-agent"
             idleMinutes 5
             yamlFile 'build-pod.yaml'
             defaultContainer 'ez-docker-helm-build'
         }
     }
-    environment{
+    environment {
         DOCKER_IMAGE = 'winterzone2/weather-app'
         GITHUB_API_URL = 'https://api.github.com'
         GITHUB_REPO = 'DaryAkerman/weather-app'
         GITHUB_TOKEN = credentials('github-token')
     }
 
-    stages{
-        stage("Checkout code"){
+    stages {
+        stage("Check for meaningful changes") {
+            steps {
+                script {
+                    def changes = sh(script: "git diff --name-only origin/${env.BRANCH_NAME} HEAD", returnStdout: true).trim()
+                    if (changes == 'applic/values.yaml') {
+                        echo "Only values.yaml was modified, skipping build."
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    } else {
+                        echo "Detected meaningful changes: ${changes}"
+                    }
+                }
+            }
+        }
+
+        stage("Checkout code") {
             steps {
                 checkout scm
             }
         }
 
-        stage("Build docker image"){
+        stage("Build docker image") {
             steps {
                 script {
                     dockerImage = docker.build("${DOCKER_IMAGE}:latest", "--no-cache .")
@@ -43,7 +58,35 @@ pipeline{
                 }
             }
         }
-        stage('Create merge request'){
+
+        stage('Update Helm values.yaml') {
+            when {
+                branch 'main'
+            }
+            steps {
+                withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                    script {
+                        def valuesFilePath = "applic/values.yaml"
+                        
+                        // Read and modify values.yaml
+                        def valuesYaml = readFile(valuesFilePath)
+                        def updatedYaml = valuesYaml.replaceAll(/(?<=tag: ).*/, "\"1.0.${env.BUILD_NUMBER}\"")
+                        writeFile(file: valuesFilePath, text: updatedYaml)
+
+                        // Commit and push changes to GitHub
+                        sh """
+                            git config user.name "Jenkins CI"
+                            git config user.email "jenkins@example.com"
+                            git add ${valuesFilePath}
+                            git commit -m "Update Helm chart image tag to 1.0.${env.BUILD_NUMBER}"
+                            git push https://$GITHUB_TOKEN@github.com/${GITHUB_REPO}.git HEAD:${env.BRANCH_NAME}
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Create merge request') {
             when {
                 not {
                     branch 'main'
