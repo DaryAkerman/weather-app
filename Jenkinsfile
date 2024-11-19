@@ -15,6 +15,12 @@ pipeline {
     }
 
     stages {
+        stage("Checkout code") {
+            steps {
+                checkout scm
+            }
+        }
+
         stage("Check for meaningful changes") {
             steps {
                 script {
@@ -27,12 +33,6 @@ pipeline {
                         echo "Detected meaningful changes: ${changes}"
                     }
                 }
-            }
-        }
-
-        stage("Checkout code") {
-            steps {
-                checkout scm
             }
         }
 
