@@ -1,0 +1,68 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Body Styling */
+body {
+    background-color: #e0f7fa; /* Light icy blue */
+    color: #03396c; /* Deep blue text */
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Header Styling */
+.header {
+    background-color: #0277bd; /* Medium blue */
+    color: white;
+    text-align: center;
+    padding: 20px 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-size: 1.2rem;
+}
+
+/* Main Content */
+.content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.section {
+    background-color: white;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.section h2 {
+    color: #01579b; /* Darker blue */
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+}
+
+.section p {
+    color: #03396c;
+    font-size: 1.1rem;
+}
+
+/* Footer Styling */
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #01579b;
+    padding: 10px 0;
+}
