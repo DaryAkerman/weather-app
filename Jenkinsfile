@@ -42,7 +42,7 @@ pipeline {
                     // Check the author of the latest commit
                     def author = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
                     if (author == "Jenkins CI") {
-                        echo "Latest commit made by Jenkins. Skipping build."
+                        echo "Latest commit made by Jenkins user bot in GitHub. Skipping build."
                         error("Build skipped because it was triggered by Jenkins.")
                     }
 
