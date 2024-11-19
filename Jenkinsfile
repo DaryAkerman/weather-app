@@ -76,7 +76,7 @@ pipeline {
                 branch 'main'
             }
             steps {
-                withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                withCredentials([string(credentialsId: 'github-secret', variable: 'GITHUB_TOKEN')]) {
                     script {
                         def valuesFilePath = "applic/values.yaml"
                         
