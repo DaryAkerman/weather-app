@@ -36,12 +36,17 @@ pipeline {
         stage("Check for meaningful changes") {
             steps {
                 script {
-                    // Ensure the latest state of the remote branch is fetched
                     sh "git fetch origin main"
+                    
+                    def author = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
+                    if (author == "Jenkins CI") {
+                        echo "Latest commit made by Jenkins. Skipping build."
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    }
 
-                    // Compare the remote branch (origin/main) with the current working tree (HEAD)
+                    // Check for meaningful changes
                     def changes = sh(script: "git diff --name-only origin/main HEAD", returnStdout: true).trim()
-
                     if (changes == 'applic/values.yaml') {
                         echo "Only values.yaml was modified, skipping build."
                         currentBuild.result = 'SUCCESS'
@@ -56,8 +61,6 @@ pipeline {
                 }
             }
         }
-
-
 
         stage("Build docker image") {
             steps {
