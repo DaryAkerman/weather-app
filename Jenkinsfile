@@ -20,6 +20,7 @@ pipeline {
                 script {
                     sh "git config --global --add safe.directory ${env.WORKSPACE}"
                     checkout scm
+                }
             }
         }
 
