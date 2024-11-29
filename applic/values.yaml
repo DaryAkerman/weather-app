@@ -8,7 +8,7 @@ image:
   repository: winterzone2/weather-app
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.0.4"
+  tag: "1.0.5"
 
 imagePullSecrets: []
 nameOverride: ""
