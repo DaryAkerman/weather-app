@@ -35,6 +35,12 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          env:
+          - name: OPENWEATHERMAP_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-api-key
+                key: api-key
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

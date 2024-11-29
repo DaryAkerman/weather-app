@@ -2,3 +2,5 @@ Flask==2.3.2
 pytest
 pytest-mock
 werkzeug==2.3.3
+requests
+python-dotenv
