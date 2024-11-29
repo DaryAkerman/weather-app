@@ -20,18 +20,6 @@ pipeline {
                 script {
                     sh "git config --global --add safe.directory ${env.WORKSPACE}"
                     checkout scm
-                    def commitMessage = sh(
-                        script: "git log -1 --pretty=%B",
-                        returnStdout: true
-                    ).trim()
-
-                    if (commitMessage.contains("[skip-ci]")) {
-                        echo "Skipping build due to commit message: ${commitMessage}"
-                        error("Build aborted due to [skip-ci] in commit message.")
-                    }
-                    
-                    echo "Proceeding with build. Commit message: ${commitMessage}"
-                }
             }
         }
 
@@ -40,6 +28,16 @@ pipeline {
                 script {
                     dockerImage = docker.build("${DOCKER_IMAGE}:latest", "--no-cache .")
                     dockerImage.tag("1.0.${env.BUILD_NUMBER}")
+                }
+            }
+        }
+
+        stage("Unit Test") {
+            steps {
+                script {
+                    sh 'docker-compose -f docker-compose.yaml up --build'
+                    sh 'docker-compose -f docker-compose.yaml run test'
+                    sh 'docker-compose -f docker-compose.yaml down'
                 }
             }
         }
@@ -71,7 +69,7 @@ pipeline {
                         writeFile(file: valuesFilePath, text: updatedYaml)
                         sh """
                             git config user.name "Jenkins CI"
-                            git config user.email "jenkins@example.com"
+                            git config user.email "jenkins@dary.com"
                             git add ${valuesFilePath}
                             git commit -m "[skip-ci] Update Helm chart image tag to 1.0.${env.BUILD_NUMBER}"
                             git push https://$GITHUB_TOKEN@github.com/${GITHUB_REPO}.git HEAD:main
