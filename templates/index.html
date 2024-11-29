@@ -10,6 +10,18 @@
     <header class="header">
         <h1>Welcome to Winter's Weather</h1>
         <p>Explore the enchanting beauty and fascinating facts about winter weather!</p>
+        
+        {% if weather %}
+        <div class="current-weather">
+            <h2>Current Weather in Tel Aviv, Israel</h2>
+            <p>Temperature: {{ weather.temperature }}°C</p>
+            <p>Conditions: {{ weather.description }}</p>
+            <p>Humidity: {{ weather.humidity }}%</p>
+            <p>Wind Speed: {{ weather.wind_speed }} m/s</p>
+        </div>
+        {% else %}
+        <p>Weather information currently unavailable</p>
+        {% endif %}
     </header>
     <main class="content">
         <section class="section">
