@@ -41,6 +41,11 @@ spec:
               secretKeyRef:
                 name: {{ .Release.Name }}-api-key
                 key: api-key
+          - name: OPENAI_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-api-key
+                key: gpt-key
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

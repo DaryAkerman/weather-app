@@ -22,7 +22,7 @@ print_status "${GREEN}" "Helm repositories added successfully!"
 # Install Jenkins
 print_status "${YELLOW}" "Installing Jenkins in jenkins namespace..."
 kubectl create namespace jenkins
-helm upgrade --install jenkins jenkins/jenkins --namespace jenkins --create-namespace
+helm upgrade --install jenkins jenkins/jenkins -f /values/valuesJenkins.yaml --namespace jenkins --create-namespace
 kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=jenkins -n jenkins
 kubectl patch svc jenkins -n jenkins -p '{"spec":{"type":"NodePort"}}'
 print_status "${GREEN}" "Jenkins installation complete!"
