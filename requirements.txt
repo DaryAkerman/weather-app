@@ -4,3 +4,5 @@ pytest-mock
 werkzeug==2.3.3
 requests
 python-dotenv
+pymongo
+openai==0.28

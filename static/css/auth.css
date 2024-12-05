@@ -1,0 +1,133 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Body Styling */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #0D1B2A;
+    color: #E0E1DD;
+}
+
+/* Logo Styling */
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+}
+
+.logo img {
+    width: 100px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.1);
+}
+
+
+/* Auth Container */
+.auth-container {
+    background: #1B263B;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Placeholder Styling */
+.auth-container input::placeholder {
+    color: #E0E1DD; /* Light white to match input styling */
+    opacity: 1; /* Ensure placeholder is fully visible */
+    font-size: 1rem; /* Match font size of the input text */
+    font-weight: 400; /* Regular weight for better readability */
+}
+
+/* Placeholder Focus Styling */
+.auth-container input:focus::placeholder {
+    color: #A9D6E5; /* Slightly brighter on focus for better feedback */
+    opacity: 0.8; /* Slightly reduced opacity on focus */
+}
+
+p {
+    padding-top: 15px;
+}
+
+/* Auth Heading */
+.auth-container h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #A9D6E5;
+}
+
+/* Form Styling */
+.auth-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-container input {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #778DA9;
+    background: #415A77;
+    color: #E0E1DD;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.auth-container input:focus {
+    border-color: #A9D6E5;
+    box-shadow: 0 0 5px rgba(169, 214, 229, 0.8);
+}
+
+/* Button Styling */
+.auth-container button {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #778DA9;
+    color: #0D1B2A;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.auth-container button:hover {
+    background: #A9D6E5;
+    color: #1B263B;
+    transform: scale(1.05);
+}
+
+/* Message Styling */
+.auth-message {
+    margin-top: 15px;
+    color: #E57373; /* Light red for errors or messages */
+    font-size: 0.9rem;
+}
+
+/* Link Styling */
+.auth-container a {
+    text-decoration: none;
+    color: #A9D6E5;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.auth-container a:hover {
+    color: #E0E1DD;
+}

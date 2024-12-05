@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    <title>Register</title>
+</head>
+<body>
+    <a href="/" class="logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Winter's Weather Logo">
+    </a>    
+    <div class="auth-container">
+        <h1>Register</h1>
+        <form method="POST" action="/register">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Register</button>
+        </form>
+        {% if message %}
+        <p class="auth-message">{{ message }}</p>
+        {% endif %}
+        <p>Already have an account? <a href="/login">Login here</a>.</p>
+    </div>
+</body>
+</html>

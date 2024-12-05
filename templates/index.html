@@ -4,57 +4,215 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
     <title>Winter's Weather</title>
 </head>
 <body>
-    <header class="header">
-        <h1>Welcome to Winter's Weather</h1>
-        <p>Explore the enchanting beauty and fascinating facts about winter weather!</p>
-        
-        {% if weather %}
-        <div class="current-weather">
-            <h2>Current Weather in Tel Aviv, Israel</h2>
-            <p>Temperature: {{ weather.temperature }}°C</p>
-            <p>Conditions: {{ weather.description }}</p>
-            <p>Humidity: {{ weather.humidity }}%</p>
-            <p>Wind Speed: {{ weather.wind_speed }} m/s</p>
+    <div class="container">
+        <a href="/" class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Winter's Weather Logo">
+        </a>
+        <!-- Authentication Buttons -->
+        <div class="auth-buttons">
+            {% if user %}
+            <p>Welcome, {{ user }}!</p>
+            <a href="/logout">Logout</a>
+            {% else %}
+            <a href="/login">Login</a> <a href="/register">Register</a>
+            {% endif %}
         </div>
-        {% else %}
-        <p>Weather information currently unavailable</p>
-        {% endif %}
-    </header>
-    <main class="content">
-        <section class="section">
-            <h2>The Magic of Snow</h2>
-            <p>
-                Snow is formed when water vapor in the atmosphere freezes into ice crystals. 
-                These tiny crystals combine to form snowflakes, which drift down to earth in the chilly winter air.
-            </p>
+
+        <!-- Weather Section -->
+        <section class="weather-section">
+            <header class="weather-header">
+                <h1>Winter's Weather</h1>
+                <p>Explore the magic of winter's enchanting beauty.</p>
+            </header>
+
+            <!-- Weather Card Container -->
+            <div id="weather-card-container">
+                {% if weather %}
+                <div class="weather-card">
+                    <h2>{{ selected_location.split(',')[0] }}</h2>
+                    <p class="temperature">{{ weather.temperature }}°C</p>
+                    <p>Conditions: {{ weather.description }}</p>
+                    <p>Humidity: {{ weather.humidity }}%</p>
+                    <p>Wind Speed: {{ weather.wind_speed }} m/s</p>
+                </div>
+                {% else %}
+                <p>Weather information currently unavailable.</p>
+                {% endif %}
+            </div>
+
+            <!-- Dropdown for Locations -->
+            <form id="location-form" class="location-form">
+                <div class="dropdown-container">
+                    <select id="location" name="location" class="dropdown">
+                        {% for loc in locations %}
+                        <option value="{{ loc.city }},{{ loc.country }}" {% if loc.city + ',' + loc.country == selected_location %}selected{% endif %}>
+                            {{ loc.city }}, {{ loc.country }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="button" id="get-weather-button">Get Weather</button>
+            </form>            
+
+            <!-- Add New Location (Visible Only for Logged-in Users) -->
+            {% if user %}
+            <div class="add-location">
+                <h3>Add New Location</h3>
+                <form id="add-location-form">
+                    <input type="text" name="city" placeholder="City" required>
+                    <input type="text" name="country" placeholder="Country (e.g., US)" required>
+                    <button type="button" id="add-location-button">Add Location</button>
+                </form>
+                <p id="location-feedback" class="feedback"></p>
+            </div>
+            {% endif %}
         </section>
-        <section class="section">
-            <h2>Winter Storms</h2>
-            <p>
-                Winter storms bring dramatic weather, from blizzards that cover landscapes in white to icy winds that chill to the bone.
-                These storms often form when cold polar air collides with moist air from warmer regions.
-            </p>
-        </section>
-        <section class="section">
-            <h2>The Science of Cold</h2>
-            <p>
-                Cold weather occurs when the tilt of the Earth causes less sunlight to reach certain areas.
-                This leads to lower temperatures and the hallmark chill of wintertime.
-            </p>
-        </section>
-        <section class="section">
-            <h2>Staying Cozy</h2>
-            <p>
-                From hot cocoa by the fire to layered clothing, humans have always found ways to stay warm and cozy during winter.
-                These traditions make the season feel magical, despite the cold.
-            </p>
-        </section>
-    </main>
+
+        <!-- Facts Section -->
+        <section class="facts-section">
+            <h2>Winter Facts</h2>
+            <div class="facts">
+                {% for fact in facts %}
+                <div class="fact" id="fact-{{ fact._id }}">
+                    <p>{{ fact.text }}</p>
+                    {% if user %}
+                    <button class="remove-fact" data-fact-id="{{ fact._id }}"></button>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        
+            <!-- Buttons for Adding/Generating Facts -->
+            {% if user %}
+            <div class="fact-actions">
+                <form id="generate-fact-form" class="fact-action-form">
+                    <textarea name="fact" placeholder="Enter a new winter fact..." required></textarea>
+                    <div class="fact-buttons">
+                        <button type="button" id="generate-fact-button" class="fact-action-button">Add Fact</button>
+                        <button type="button" id="generate-chatgpt-fact-button" class="fact-action-button">Generate with GPT</button>
+                    </div>
+                </form>
+            </div>
+            <p id="fact-feedback" class="feedback"></p>
+            <p id="chatgpt-fact-feedback" class="feedback"></p>
+            {% endif %}
+        </section>         
+    </div>
+
     <footer class="footer">
         <p>© 2024 Winter's Weather | All Rights Reserved</p>
     </footer>
+
+    <!-- JavaScript for Handling AJAX Requests -->
+    <script>
+        // Handle "Get Weather" - Update Weather Card Without Reload
+        document.getElementById("get-weather-button").addEventListener("click", () => {
+            const locationForm = document.getElementById("location-form");
+            const formData = new FormData(locationForm);
+
+            // Send AJAX request to fetch new weather data
+            fetch("/", {
+                method: "POST",
+                body: formData,
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+            })
+            .then((response) => response.text())
+            .then((html) => {
+                // Parse the returned HTML and extract the weather card
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, "text/html");
+                const newWeatherCard = doc.getElementById("weather-card-container").innerHTML;
+
+                // Replace the weather card content dynamically
+                document.getElementById("weather-card-container").innerHTML = newWeatherCard;
+            })
+            .catch((error) => console.error("Error fetching weather:", error));
+        });
+
+        // Handle Add Location
+        document.getElementById("add-location-button")?.addEventListener("click", () => {
+            const form = document.getElementById("add-location-form");
+            const formData = new FormData(form);
+            fetch("/add_location", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const feedback = document.getElementById("location-feedback");
+                feedback.textContent = data.message;
+                feedback.style.color = data.success ? "green" : "red";
+                if (data.success) setTimeout(() => location.reload(), 1000);
+            });
+        });
+
+        // Handle Generate Fact
+        document.getElementById("generate-fact-button").addEventListener("click", () => {
+            const form = document.getElementById("generate-fact-form");
+            const formData = new FormData(form);
+
+            fetch("/generate_fact", {
+                method: "POST",
+                body: formData,
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                const feedback = document.getElementById("fact-feedback");
+                feedback.textContent = data.message;
+                feedback.style.color = data.success ? "green" : "red";
+
+                if (data.success) {
+                    setTimeout(() => location.reload(), 1000); // Reload the page after a delay
+                }
+            })
+            .catch((error) => console.error("Error adding fact:", error));
+        });
+
+        // Handle Remove Fact
+        document.querySelectorAll(".remove-fact").forEach(button => {
+            button.addEventListener("click", () => {
+                const factId = button.getAttribute("data-fact-id");
+                const formData = new FormData();
+                formData.append("fact_id", factId);
+
+                fetch("/remove_fact", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove the fact from the DOM
+                        document.getElementById(`fact-${factId}`).remove();
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        });
+
+        // Handle Generate Fact Using ChatGPT
+        document.getElementById("generate-chatgpt-fact-button").addEventListener("click", () => {
+            fetch("/generate_chatgpt_fact", {
+                method: "POST",
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                const feedback = document.getElementById("chatgpt-fact-feedback");
+                feedback.textContent = data.message;
+                feedback.style.color = data.success ? "green" : "red";
+
+                if (data.success) {
+                    setTimeout(() => location.reload(), 1000); // Reload the page after a delay
+                }
+            })
+            .catch((error) => console.error("Error generating fact with GPT:", error));
+        });
+    </script>
 </body>
 </html>
