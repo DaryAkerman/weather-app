@@ -1,0 +1,3 @@
+auth:
+  existingSecret: mongodb
+  enabled: true
