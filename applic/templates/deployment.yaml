@@ -49,10 +49,15 @@ spec:
           - name: MONGO_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: mongodb
-                key: mongodb-root-password
+                name: {{ include "applic.name" . }}-mongo-auth
+                key: password
+          - name: MONGO_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "applic.name" . }}-mongo-auth
+                key: username
           - name: MONGO_URI
-            value: "mongodb://root:$(MONGO_PASSWORD)@{{ include "applic.name" . }}-mongo:27017/weather_app?authSource=admin"
+            value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@{{ include "applic.name" . }}-mongo:27017/weather_app?authSource=admin"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

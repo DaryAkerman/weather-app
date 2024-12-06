@@ -140,5 +140,8 @@ mongo:
     accessModes:
       - ReadWriteOnce
     storageClass: ""
-  environment:
-    MONGO_INITDB_ROOT_USERNAME: root
+  auth:
+    auth:
+    rootUser: root
+    createSecret: true
+    existingSecret: mongo-auth-secret

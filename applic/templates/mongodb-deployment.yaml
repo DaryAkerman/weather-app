@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/component: mongodb
 spec:
-  replicas: {{ .Values.mongo.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "applic.name" . }}
@@ -22,20 +22,25 @@ spec:
         app.kubernetes.io/component: mongodb
     spec:
       containers:
-        - name: mongo
-          image: "{{ .Values.mongo.image.repository }}:{{ .Values.mongo.image.tag }}"
-          imagePullPolicy: {{ .Values.mongo.image.pullPolicy }}
+        - name: mongodb
+          image: mongo:5.0
           ports:
             - containerPort: {{ .Values.mongo.service.port }}
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
-              value: "{{ .Values.mongo.environment.MONGO_INITDB_ROOT_USERNAME }}"
-          resources:
-{{ toYaml .Values.mongo.resources | indent 12 }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mongo.auth.existingSecret }}
+                  key: username
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mongo.auth.existingSecret }}
+                  key: password
           volumeMounts:
             - name: mongo-data
               mountPath: /data/db
       volumes:
         - name: mongo-data
           persistentVolumeClaim:
-            claimName: {{ include "applic.name" . }}-mongo-pvc
+            claimName: {{ include "applic.name" . }}-mongo

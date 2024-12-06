@@ -1,16 +1,15 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "applic.name" . }}-mongo-pvc
+  name: {{ include "applic.name" . }}-mongo
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ include "applic.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/component: mongodb
 spec:
-  accessModes:
-    - {{ .Values.mongo.storage.accessModes | join "," }}
+  accessModes: {{ toYaml .Values.mongo.persistence.accessModes | nindent 2 }}
   resources:
     requests:
-      storage: {{ .Values.mongo.storage.size }}
-  storageClassName: {{ .Values.mongo.storage.storageClass | quote }}
+      storage: {{ .Values.mongo.persistence.size }}
+  storageClassName: {{ .Values.mongo.persistence.storageClass | quote }}
