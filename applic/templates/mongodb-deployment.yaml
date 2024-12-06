@@ -38,4 +38,4 @@ spec:
       volumes:
         - name: mongo-data
           persistentVolumeClaim:
-            claimName: {{ include "app.fullname" . }}-mongo-pvc
+            claimName: {{ include "applic.name" . }}-mongo-pvc
