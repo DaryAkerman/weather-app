@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/component: mongodb
 spec:
   accessModes:
-    - {{ .Values.mongo.storage.accessModes | join , }}
+    - {{ .Values.mongo.storage.accessModes | join "," }}
   resources:
     requests:
       storage: {{ .Values.mongo.storage.size }}

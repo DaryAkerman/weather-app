@@ -3,3 +3,4 @@ ac.txt
 __pycache__
 .pytest_cache
 .env
+application.yaml
