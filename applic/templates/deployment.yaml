@@ -52,7 +52,7 @@ spec:
                 name: mongodb
                 key: mongodb-root-password
           - name: MONGO_URI
-            value: "mongodb://root:$(MONGO_PASSWORD)@mongodb:27017/"
+            value: "mongodb://root:$(MONGO_PASSWORD)@mongodb:27017/weather_app?authSource=admin"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
