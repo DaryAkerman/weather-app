@@ -46,14 +46,13 @@ spec:
               secretKeyRef:
                 name: {{ .Release.Name }}-api-key
                 key: gpt-key
-          - name: MONGO_URI
-            value: "mongodb://root:$(MONGO_PASSWORD)@mongodb:27017/weather_app"
-            env:
-              - name: MONGO_PASSWORD
+          - name: MONGO_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: mongodb
                     key: mongodb-root-password
+          - name: MONGO_URI
+            value: "mongodb://root:$(MONGO_PASSWORD)@mongodb:27017/weather_app"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
