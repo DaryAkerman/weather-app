@@ -16,6 +16,7 @@ app.secret_key = os.getenv("SECRET_KEY", "mysecretkey")
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
 client = MongoClient(MONGO_URI)
 db = client.weather_app
+print(f"Connecting to MongoDB: {MONGO_URI.split('@')[1]}")
 
 # Configuration
 MAX_FACTS = int(os.getenv("MAX_FACTS", 6))
