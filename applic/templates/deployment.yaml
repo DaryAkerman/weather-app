@@ -49,12 +49,12 @@ spec:
           - name: MONGO_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ include "applic.name" . }}-mongo-auth
+                name: {{ .Values.mongo.auth.existingSecret }}
                 key: password
           - name: MONGO_USERNAME
             valueFrom:
               secretKeyRef:
-                name: {{ include "applic.name" . }}-mongo-auth
+                name: {{ .Values.mongo.auth.existingSecret }}
                 key: username
           - name: MONGO_URI
             value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@{{ include "applic.name" . }}-mongo:27017/weather_app?authSource=admin"
