@@ -8,8 +8,8 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/component: mongodb
 spec:
-  accessModes: {{ toYaml .Values.mongo.persistence.accessModes | nindent 2 }}
+  accessModes: {{ toYaml .Values.mongo.storage.accessModes | nindent 2 }}
   resources:
     requests:
-      storage: {{ .Values.mongo.persistence.size }}
-  storageClassName: {{ .Values.mongo.persistence.storageClass | quote }}
+      storage: {{ .Values.mongo.storage.size }}
+  storageClassName: {{ .Values.mongo.storage.storageClass | quote }}
