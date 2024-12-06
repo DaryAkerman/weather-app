@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "app.fullname" . }}-mongo-pvc
+  name: {{ include "app.name" . }}-mongo-pvc
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ include "app.name" . }}

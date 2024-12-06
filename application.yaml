@@ -14,7 +14,7 @@ spec:
         - name: apiKey
           value: "your-api-key"
         - name: gptKey
-          value: "your-gpt-key"
+          value: "your-api-key"
   destination:
     server: https://kubernetes.default.svc
     namespace: default

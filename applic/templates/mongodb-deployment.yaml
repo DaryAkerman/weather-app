@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "app.fullname" . }}-mongo
+  name: {{ include "app.name" . }}-mongo
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ include "app.name" . }}
