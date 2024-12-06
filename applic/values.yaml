@@ -140,7 +140,7 @@ mongo:
     size: "1Gi"
     accessModes:
       - ReadWriteOnce
-    storageClass: ""
+    storageClass: "standard"
   auth:
     auth:
     rootUser: root
