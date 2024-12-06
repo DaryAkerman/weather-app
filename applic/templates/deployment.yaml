@@ -52,7 +52,7 @@ spec:
                 name: mongodb
                 key: mongodb-root-password
           - name: MONGO_URI
-            value: "mongodb://root:$(MONGO_PASSWORD)@mongodb:27017/"
+            value: "mongodb://root:$(MONGO_PASSWORD)@mongodb.default.svc.cluster.local:27017/"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
