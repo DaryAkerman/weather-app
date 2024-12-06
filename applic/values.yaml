@@ -118,7 +118,6 @@ affinity: {}
 apiKey: ""
 gptKey: ""
 
-# MongoDB configuration
 mongo:
   enabled: true
   image:
