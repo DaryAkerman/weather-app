@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "app.fullname" . }}-mongo-pvc
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "app.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: mongodb
+spec:
+  accessModes:
+    - {{ .Values.mongo.storage.accessModes | join , }}
+  resources:
+    requests:
+      storage: {{ .Values.mongo.storage.size }}
+  storageClassName: {{ .Values.mongo.storage.storageClass | quote }}
