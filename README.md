@@ -27,8 +27,6 @@ This comprehensive setup ensures a reliable, scalable, and feature-packed applic
 
 ### User Interface
 
-Here's a glimpse of the Weather Application interface:
-
 *Logged Out View*
 ![Logged Out View](images/weather-app-image-1.png)
 
