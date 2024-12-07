@@ -21,11 +21,11 @@ This comprehensive setup ensures a reliable, scalable, and feature-packed applic
 
 Here's a glimpse of the Weather Application interface:
 
-![Logged Out View](images/weather-app-image-1.png)
 *Logged Out View*
+![Logged Out View](images/weather-app-image-1.png)
 
-![Logged In View](images/weather-app-image-2.png)
 *Logged In View*
+![Logged In View](images/weather-app-image-2.png)
 
 ---
 
