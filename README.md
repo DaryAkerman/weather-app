@@ -42,6 +42,7 @@ Here's a glimpse of the Weather Application interface:
 - **Monitoring**: Uses Prometheus and Grafana to track performance and visualize key metrics.
 
 ---
+
 ## Tools and Technologies Used
 
 1. **Python**:
@@ -77,5 +78,55 @@ Here's a glimpse of the Weather Application interface:
 
 11. **Shell Scripting**:
     - Automates infrastructure setup (`infra.sh`) and obtaining passwords for jenkins+argo (`getPasswords.sh`).
+
+---
+
+## Installation and Setup
+
+Setting up the Weather Application is straightforward. Follow these steps to deploy the application and its infrastructure.
+
+### Prerequisites
+Ensure the following tools are installed on your machine:
+- **Python**
+- **Docker**
+- **Kubernetes CLI** (`kubectl`)
+- **Bash**
+
+### Steps to Install and Setup
+
+1. **Clone the Repository**:
+   Clone the project repository to your local machine:
+   ```bash
+   git clone <repository-url>
+   cd weather-application
+   ```
+
+2. **Prepare Infrastructure**:
+   - Make the `infra.sh` script executable:
+     ```bash
+     chmod +x infra.sh
+     ```
+   - Run the script to install the required infrastructure on the Kubernetes cluster:
+     ```bash
+     ./infra.sh
+     ```
+   - This will set up:
+     - **Jenkins** for CI/CD pipelines.
+     - **Prometheus and Grafana** for monitoring, using Helm.
+     - **ArgoCD** for GitOps-based deployments.
+
+3. **Set Up Jenkins**:
+   - After the infrastructure installation, access Jenkins and create a **Multibranch Pipeline** for your repository.
+
+4. **Configure ArgoCD**:
+   - Access ArgoCD and configure the settings for your own repository.
+   - Modify the `application.yaml` file to suit your setup (e.g., repository URL, branch, or path).
+
+5. **Deploy the Application**:
+   - Once the `application.yaml` file is configured, apply it to the Kubernetes cluster:
+     ```bash
+     kubectl apply -f application.yaml
+     ```
+   - This will deploy the application using ArgoCD.
 
 ---
