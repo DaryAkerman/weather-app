@@ -78,6 +78,6 @@ Here's a glimpse of the Weather Application interface:
     - Validates the application with unit tests included in `test_app.py`.
 
 11. **Shell Scripting**:
-    - Automates infrastructure setup (`infra.sh`) and credential management (`getPasswords.sh`).
+    - Automates infrastructure setup (`infra.sh`) and obtaining passwords for jenkins+argo (`getPasswords.sh`).
 
 ---
