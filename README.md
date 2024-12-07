@@ -97,7 +97,7 @@ Ensure the following tools are installed on your machine:
 1. **Clone the Repository**:
    Clone the project repository to your local machine:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/DaryAkerman/weather-app
    cd weather-application
    ```
 
