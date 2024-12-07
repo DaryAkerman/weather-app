@@ -111,9 +111,9 @@ Ensure the following tools are installed on your machine:
      ./infra.sh
      ```
    - This will set up:
-     - **Jenkins** for CI/CD pipelines.
-     - **Prometheus and Grafana** for monitoring, using Helm.
+     - **Jenkins** for CI pipeline.
      - **ArgoCD** for GitOps-based deployments.
+     - **Prometheus and Grafana** for monitoring, using Helm.
 
 3. **Set Up Jenkins**:
    - After the infrastructure installation, access Jenkins and create a **Multibranch Pipeline** for your repository.
