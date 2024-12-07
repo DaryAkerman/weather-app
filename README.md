@@ -35,6 +35,12 @@ Here's a glimpse of the Weather Application interface:
 *Logged In View*
 ![Logged In View](images/weather-app-image-2.png)
 
+### Application Architecture
+
+The following diagram showcases the CI/CD pipeline and deployment architecture of the Weather Application:
+*Architecture*
+![Architecture](images/weather-app-gif.gif)
+
 ---
 
 ## Features
