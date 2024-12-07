@@ -1,3 +1,13 @@
+## Table of Contents
+- [Weather Application](#weather-application)
+- [Key Highlights](#key-highlights)
+- [User Interface](#user-interface)
+- [Features](#features)
+- [Tools and Technologies Used](#tools-and-technologies-used)
+- [Installation and Setup](#installation-and-setup)
+
+---
+
 # Weather Application
 
 This project is a **feature-rich weather application** designed to provide real-time weather forecasts and additional functionalities through an intuitive user interface. By leveraging modern DevOps practices and technologies, it ensures seamless deployment, robust scalability, and efficient monitoring.
