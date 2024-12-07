@@ -50,9 +50,6 @@ Here's a glimpse of the Weather Application interface:
    - Backend logic implemented in Flask (`app.py`) for handling API requests and serving HTML pages.
    - Integrates OpenAI for generating interesting facts.
 
-2. **OpenAI**:
-   - Provides the functionality to generate fun or informative facts for users.
-
 3. **MongoDB**:
    - Efficiently stores and retrieves application data.
 
