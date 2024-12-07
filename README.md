@@ -138,5 +138,3 @@ Ensure the following tools are installed on your machine:
      kubectl apply -f application.yaml
      ```
    - This will deploy the application using ArgoCD.
-
----
