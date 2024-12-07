@@ -15,8 +15,6 @@ This project is a **feature-rich weather application** designed to provide real-
 
 This comprehensive setup ensures a reliable, scalable, and feature-packed application that runs smoothly in modern cloud-native environments.
 
----
-
 ### User Interface
 
 Here's a glimpse of the Weather Application interface:
