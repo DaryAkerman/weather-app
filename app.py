@@ -74,7 +74,9 @@ def generate_chatgpt_fact():
 
         return jsonify({"success": True, "message": "Fact generated successfully!", "fact": fact})
     except Exception as e:
-        return jsonify({"success": False, "message": f"Error: {str(e)}"}), 500
+        import logging
+        logging.error("An error occurred: %s", str(e), exc_info=True)
+        return jsonify({"success": False, "message": "An internal error has occurred."}), 500
 
 # Utility: Ensure default locations and facts
 def ensure_defaults():
